@@ -13,7 +13,7 @@ pub struct Git {
 }
 #[derive(Serialize, Deserialize, Debug)]
 struct PullRequest {
-    url: String,
+    html_url: String,
     user: User
 }
 
@@ -45,11 +45,11 @@ pub async fn root_handler(body: Json<Git>) -> impl IntoResponse {
         println!("{:?}", name);
         let mention = members.into_iter().find(|member| member.gitId == *name).unwrap().slackId;
         println!("{:?}", mention);
-        let _ = send_slack(&format!("{:?} がプルリク見てって言ってるよ 見てあげなよ\n{:?}", body.pull_request.user.login, body.pull_request.url), &mention).await;
+        let _ = send_slack(&format!("{:?} がプルリク見てって言ってるよ 見てあげなよ\n{:?}", body.pull_request.user.login, body.pull_request.html_url), &mention).await;
         
     }
     if body.action == "opened" {
-        let _ = send_slack(&format!("{:?}がプルリク作ったよ みてあげてね\n{:?}", body.pull_request.user.login, body.pull_request.url), "U07AHBRP38C").await;
+        let _ = send_slack(&format!("{:?}がプルリク作ったよ みてあげてね\n{:?}", body.pull_request.user.login, body.pull_request.html_url), "U07AHBRP38C").await;
     }
     {
         StatusCode::OK
